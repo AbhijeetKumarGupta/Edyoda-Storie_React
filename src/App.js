@@ -9,19 +9,26 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      fliterData: [],
+      fliterData: [{ id: 0, title: "All" }],
       storiesData: [],
+      currentFilterSelected: "All",
     };
   }
 
   componentDidMount() {
     fetch("https://api.edyoda.com/v1/blog/postcategories/")
       .then((res) => res.json())
-      .then((result) => this.setState({ fliterData: result }));
+      .then((result) =>
+        this.setState({ fliterData: [...this.state.fliterData, ...result] })
+      );
     fetch("https://api.edyoda.com/v1/blog/")
       .then((res) => res.json())
       .then((result) => this.setState({ storiesData: result }));
   }
+
+  updateCurrentFilter = (e) => {
+    this.setState({ currentFilterSelected: e.target.innerHTML });
+  };
 
   render() {
     return (
@@ -46,9 +53,14 @@ class App extends Component {
                   <p className="FilterText">Filter by Category</p>
                 </div>
                 <div className="CategoryList">
-                  <div className="CategoryItem Active">All</div>
                   {this.state.fliterData.map(({ id, title }, index) => (
-                    <Filter id={id} title={title} key={index} />
+                    <Filter
+                      updateFilter={this.updateCurrentFilter}
+                      selected={this.state.currentFilterSelected}
+                      id={id}
+                      title={title}
+                      key={index}
+                    />
                   ))}
                 </div>
               </div>

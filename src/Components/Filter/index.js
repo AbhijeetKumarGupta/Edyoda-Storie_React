@@ -7,17 +7,35 @@ class Filter extends Component {
     this.state = {
       id: props.id,
       title: props.title,
-      isSelected: false,
+      curSelected: props.selected,
+      updateFilter: props.updateFilter,
     };
   }
 
+  shouldComponentUpdate(nextProps) {
+    if (this.state.curSelected !== nextProps.selected) {
+      this.setState({ curSelected: nextProps.selected });
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   render() {
-    return this.state.isSelected ? (
-      <div id={this.state.id} className="CategoryItem Active">
+    return this.state.curSelected === this.state.title ? (
+      <div
+        onClick={this.state.updateFilter}
+        id={this.state.id}
+        className="CategoryItem Active"
+      >
         {this.state.title}
       </div>
     ) : (
-      <div id={this.state.id} className="CategoryItem ">
+      <div
+        onClick={this.state.updateFilter}
+        id={this.state.id}
+        className="CategoryItem "
+      >
         {this.state.title}
       </div>
     );
