@@ -11,6 +11,7 @@ class App extends Component {
     this.state = {
       fliterData: [{ id: 0, title: "All" }],
       storiesData: [],
+      blogCategory: "",
       currentFilterSelected: "All",
     };
   }
@@ -24,6 +25,35 @@ class App extends Component {
     fetch("https://api.edyoda.com/v1/blog/")
       .then((res) => res.json())
       .then((result) => this.setState({ storiesData: result }));
+  }
+
+  componentDidUpdate() {
+    if (this.state.currentFilterSelected !== "All") {
+      var category = "";
+      this.state.currentFilterSelected
+        .split("")
+        .forEach(
+          (item) => (category += item === " " ? "-" : item.toLocaleLowerCase())
+        );
+      console.log(category);
+      // CORS ERROR
+      // fetch("https://api.edyoda.com/v1/blog/" + category)
+      //   .then((res) => res.json())
+      //   .then((result) => {
+      //     if (this.state.storiesData !== result) {
+      //       this.setState({ storiesData: result });
+      //     }
+      //   });
+    } else {
+      // CORS ERROR
+      // fetch("https://api.edyoda.com/v1/blog/")
+      //   .then((res) => res.json())
+      //   .then((result) => {
+      //     if (this.state.storiesData !== result) {
+      //       this.setState({ storiesData: result });
+      //     }
+      //   });
+    }
   }
 
   updateCurrentFilter = (e) => {
